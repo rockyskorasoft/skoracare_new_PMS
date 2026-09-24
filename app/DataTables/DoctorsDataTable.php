@@ -41,6 +41,20 @@ class DoctorsDataTable extends DataTable
 
                 return view('layouts.partials.dataTable-action-button', compact('editRoute', 'deleteRoute', 'viewRoute'));
             })
+            ->addColumn('profile_pic', function ($row) {
+                if (!empty($row->profile_pic)) {
+                    $src = asset('storage/profile_images/' . $row->profile_pic);
+                    return '<img src="' . e($src) . '" class="rounded-circle object-fit-cover shadow-sm border" width="36" height="36" alt="' . e($row->name) . '" onerror="this.style.display=\'none\';">';
+                }
+                $initials = strtoupper(substr($row->first_name ?? 'D', 0, 1) . substr($row->last_name ?? '', 0, 1));
+                return '<div class="rounded-circle bg-primary-subtle text-primary fw-bold d-inline-flex align-items-center justify-content-center border" style="width:36px;height:36px;font-size:12px;">' . e($initials) . '</div>';
+            })
+            ->editColumn('specialization', function ($row) {
+                return $row->specialization ? '<span class="badge bg-primary-subtle text-primary border border-primary-subtle">' . e($row->specialization_label) . '</span>' : '<span class="text-muted">N/A</span>';
+            })
+            ->editColumn('experience', function ($row) {
+                return ($row->experience !== null && $row->experience !== '') ? '<span class="badge bg-secondary-subtle text-dark border">' . e($row->experience_text) . '</span>' : '<span class="text-muted">N/A</span>';
+            })
             ->editColumn('status', function ($row) {
                 return $row->status ? __('labels.'.$row->status) : 'N/A';
             })
@@ -53,6 +67,7 @@ class DoctorsDataTable extends DataTable
             ->editColumn('registration_number', function ($row) {
                 return $row->registration_number ? $row->registration_number : 'N/A';
             })
+            ->rawColumns(['action', 'profile_pic', 'specialization', 'experience'])
             ->setRowId('id');
     }
 
@@ -73,7 +88,7 @@ class DoctorsDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom("<'d-flex justify-content-start mb-2'B><'search-bar-wrapper'lf>r<'table-wrapper yajra-table-custom-class table-responsive'tr><'pagination-wrapper'ip>")
-            ->orderBy(1);
+            ->orderBy(2);
 
         $buttons = [];
         if ($createDoctor) {
@@ -100,10 +115,18 @@ class DoctorsDataTable extends DataTable
         return [
             Column::computed('DT_RowIndex')
                 ->title(__('labels.id'))
+                ->width(40)
+                ->addClass('text-center'),
+            Column::computed('profile_pic')
+                ->title('Photo')
+                ->exportable(false)
+                ->printable(false)
                 ->width(50)
                 ->addClass('text-center'),
             Column::make('first_name')->title(__('labels.first_name')),
             Column::make('last_name')->title(__('labels.last_name')),
+            Column::make('specialization')->title('Specialization'),
+            Column::make('experience')->title('Experience'),
             Column::make('email')->title(__('labels.email')),
             Column::make('phone_no')->title(__('labels.mobile_number')),
             Column::make('qualification')->title('Qualification'),

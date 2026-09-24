@@ -34,6 +34,8 @@ class UserService
                 'address',
                 'qualification',
                 'registration_number',
+                'specialization',
+                'experience',
                 'package_id',
                 'max_clinics',
                 'max_users',

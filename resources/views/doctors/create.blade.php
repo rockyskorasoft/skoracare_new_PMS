@@ -45,6 +45,15 @@
                         type="password" placeholder="Confirm password"
                         errorField="password_confirmation" labelClass="required" />
 
+                    <x-select-field class="col-md-6" label="Specialization" name="specialization" id="specialization"
+                        :options="$specializations" :value="old('specialization')" placeholder="Select Specialization"
+                        errorField="specialization" />
+
+                    <x-input-field class="col-md-6" label="Experience (Years)" name="experience" id="experience"
+                        type="number" :value="old('experience')" placeholder="e.g. 5"
+                        min="0" max="80" step="1"
+                        errorField="experience" />
+
                     <x-input-field class="col-md-6" label="Qualification" name="qualification" id="qualification"
                         type="text" :value="old('qualification')" placeholder="MBBS, MD"
                         errorField="qualification" />
@@ -52,6 +61,18 @@
                     <x-input-field class="col-md-6" label="Registration Number" name="registration_number" id="registration_number"
                         type="text" :value="old('registration_number')" placeholder="REG123456"
                         errorField="registration_number" />
+
+                    <div class="col-md-12">
+                        <label for="profile_pic" class="form-label">Profile Picture</label>
+                        <input type="file" name="profile_pic" id="profile_pic" class="form-control @error('profile_pic') is-invalid @enderror" accept="image/*" onchange="previewProfilePic(event)">
+                        <small class="text-muted">Allowed formats: JPG, PNG, WEBP, GIF (Max: 5MB)</small>
+                        @error('profile_pic')
+                            <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                        @enderror
+                        <div class="mt-2 d-none" id="profilePicPreviewWrapper">
+                            <img id="profilePicPreview" src="" alt="Profile Preview" class="img-thumbnail rounded-circle object-fit-cover shadow-sm" style="width: 80px; height: 80px;">
+                        </div>
+                    </div>
 
                     <x-text-area-field
                         divClass="col-md-12"
@@ -182,6 +203,22 @@
 
     {{-- Package selection auto-check & toggle JS script --}}
     <script>
+        function previewProfilePic(event) {
+            var input = event.target;
+            var previewWrapper = document.getElementById('profilePicPreviewWrapper');
+            var previewImg = document.getElementById('profilePicPreview');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewWrapper.classList.remove('d-none');
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                previewWrapper.classList.add('d-none');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             var packageMap = @json($packagePermissionsMap);
             var packageSelect = document.getElementById('package_id');

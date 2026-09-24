@@ -21,7 +21,21 @@
                 </a>
             </li>
 
-            {{-- 2. Users (@can guarded) --}}
+            {{-- 2. Roles (@can guarded) --}}
+            @can('role-list')
+            <li class="dr-nav-item">
+                <a href="{{ route('admin.roles.index') }}"
+                   class="dr-nav-link {{ Request::routeIs('admin.roles.*') ? 'active' : '' }}"
+                   title="{{ __('labels.roles') }}">
+                    <span class="dr-nav-icon-wrapper">
+                        <i class="fa-solid fa-users-gear"></i>
+                    </span>
+                    <span class="dr-nav-label">{{ __('labels.roles') }}</span>
+                </a>
+            </li>
+            @endcan
+
+            {{-- 3. Users (@can guarded) --}}
             @can('user-list')
             <li class="dr-nav-item">
                 <a href="{{ route('admin.users.index') }}"
@@ -49,7 +63,7 @@
             </li>
             @endif
 
-            {{-- 3. Doctors (@can guarded) --}}
+            {{-- 4. Doctors (@can guarded) --}}
             @can('doctor-list')
             <li class="dr-nav-item">
                 <a href="{{ route('admin.doctors.index') }}"
@@ -77,19 +91,7 @@
             </li>
             @endcan
 
-            {{-- 4. Roles (@can guarded) --}}
-            @can('role-list')
-            <li class="dr-nav-item">
-                <a href="{{ route('admin.roles.index') }}"
-                   class="dr-nav-link {{ Request::routeIs('admin.roles.*') ? 'active' : '' }}"
-                   title="{{ __('labels.roles') }}">
-                    <span class="dr-nav-icon-wrapper">
-                        <i class="fa-solid fa-users-gear"></i>
-                    </span>
-                    <span class="dr-nav-label">{{ __('labels.roles') }}</span>
-                </a>
-            </li>
-            @endcan
+            
 
             {{-- 5. Packages (@can guarded) --}}
             @can('package-list')

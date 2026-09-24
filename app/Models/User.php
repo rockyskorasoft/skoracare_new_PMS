@@ -17,7 +17,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['first_name', 'last_name', 'email', 'password', 'profile_pic', 'date_of_birth', 'phone_no', 'status', 'address', 'qualification', 'registration_number', 'package_id', 'max_clinics', 'max_users', 'package_expires_at', 'created_by'])]
+#[Fillable(['first_name', 'last_name', 'email', 'password', 'profile_pic', 'date_of_birth', 'phone_no', 'status', 'address', 'qualification', 'registration_number', 'specialization', 'experience', 'package_id', 'max_clinics', 'max_users', 'package_expires_at', 'created_by'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -37,6 +37,7 @@ class User extends Authenticatable
             'email_verified_at'  => 'datetime',
             'package_expires_at' => 'datetime',
             'password'           => 'hashed',
+            'experience'         => 'integer',
         ];
     }
 
@@ -66,6 +67,48 @@ class User extends Authenticatable
     public function getNameAttribute()
     {
         return trim(" {$this->first_name} {$this->last_name}");
+    }
+
+    /**
+     * Human-readable label for doctor specialization.
+     * Uses DoctorSpecialization enum if matched, or falls back to raw value.
+     */
+    public function getSpecializationLabelAttribute(): string
+    {
+        if (empty($this->specialization)) {
+            return 'N/A';
+        }
+
+        $enumCase = \App\Enums\DoctorSpecialization::tryFrom($this->specialization);
+        if ($enumCase) {
+            return $enumCase->label();
+        }
+
+        return $this->specialization;
+    }
+
+    /**
+     * Formatted experience display (e.g., "5 Years").
+     */
+    public function getExperienceTextAttribute(): string
+    {
+        if ($this->experience === null || $this->experience === '') {
+            return 'N/A';
+        }
+
+        return $this->experience . ' ' . ($this->experience == 1 ? 'Year' : 'Years');
+    }
+
+    /**
+     * Full URL for user's profile picture or null if none uploaded.
+     */
+    public function getProfilePicUrlAttribute(): ?string
+    {
+        if (!empty($this->profile_pic)) {
+            return asset('storage/profile_images/' . $this->profile_pic);
+        }
+
+        return null;
     }
 
     /**

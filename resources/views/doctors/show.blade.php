@@ -20,10 +20,27 @@
     <div class="show-detail-page">
         {{-- Header Card --}}
         <div class="detail-header-card">
-            <div class="detail-avatar">{{ $initials }}</div>
+            @if(!empty($user->profile_pic))
+                <img src="{{ asset('storage/profile_images/' . $user->profile_pic) }}" alt="{{ $fullName }}" class="rounded-circle object-fit-cover border shadow-sm me-3" style="width: 72px; height: 72px;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                <div class="detail-avatar" style="display:none;">{{ $initials }}</div>
+            @else
+                <div class="detail-avatar">{{ $initials }}</div>
+            @endif
             <div class="detail-header-info">
                 <h4 class="detail-title">{{ $fullName }}</h4>
-                <p class="detail-subtitle">{{ $user->email }}</p>
+                <p class="detail-subtitle mb-1">{{ $user->email }}</p>
+                <div class="d-flex flex-wrap gap-1 mt-1">
+                    @if($user->specialization)
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
+                            <i class="fa-solid fa-user-doctor me-1"></i>{{ $user->specialization_label }}
+                        </span>
+                    @endif
+                    @if($user->experience !== null && $user->experience !== '')
+                        <span class="badge bg-info-subtle text-info border border-info-subtle">
+                            <i class="fa-solid fa-briefcase me-1"></i>{{ $user->experience_text }}
+                        </span>
+                    @endif
+                </div>
             </div>
             <div class="detail-header-badge">
                 <span class="badge {{ $isActive ? 'bg-success' : 'bg-secondary' }}">
@@ -55,6 +72,14 @@
                 <div class="detail-item">
                     <div class="detail-label">Phone Number</div>
                     <div class="detail-value">{{ $user->phone_no ?? 'N/A' }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Specialization</div>
+                    <div class="detail-value">{{ $user->specialization_label }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Experience</div>
+                    <div class="detail-value">{{ $user->experience_text }}</div>
                 </div>
                 <div class="detail-item">
                     <div class="detail-label">Qualification</div>

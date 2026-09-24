@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\DataTables\DoctorsDataTable;
 use App\Enums\CommonStatus;
+use App\Enums\DoctorSpecialization;
 use App\Helpers\UserHelper;
 use App\Http\Requests\Doctor\CreateRequest;
 use App\Http\Requests\Doctor\UpdateRequest;
@@ -66,7 +67,9 @@ class DoctorController extends WebController
             ]];
         });
 
-        return view('doctors.create', compact('permissions', 'packages', 'packagePermissionsMap'));
+        $specializations = DoctorSpecialization::options();
+
+        return view('doctors.create', compact('permissions', 'packages', 'packagePermissionsMap', 'specializations'));
     }
 
     /**
@@ -156,7 +159,9 @@ class DoctorController extends WebController
             ]];
         });
 
-        return view('doctors.edit', compact('user', 'statusData', 'permissions', 'userPermissionIds', 'packages', 'packagePermissionsMap'));
+        $specializations = DoctorSpecialization::options();
+
+        return view('doctors.edit', compact('user', 'statusData', 'permissions', 'userPermissionIds', 'packages', 'packagePermissionsMap', 'specializations'));
     }
 
     /**

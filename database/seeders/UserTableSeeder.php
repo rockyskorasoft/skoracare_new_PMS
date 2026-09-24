@@ -56,6 +56,8 @@ class UserTableSeeder extends Seeder
                 'status' => CommonStatus::ACTIVE->value,
                 'qualification' => 'MBBS, MD',
                 'registration_number' => 'DOC12345',
+                'specialization' => \App\Enums\DoctorSpecialization::CARDIOLOGIST->value,
+                'experience' => 12,
                 'package_id' => $goldPkg->id ?? null,
                 'address' => 'Skoracare Hospital, Sector 12',
             ]);

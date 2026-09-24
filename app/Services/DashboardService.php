@@ -34,6 +34,8 @@ class DashboardService
                 'clinic_count' => $userClinics->count(),
                 'qualification' => $user->qualification ?? 'N/A',
                 'registration_number' => $user->registration_number ?? 'N/A',
+                'specialization' => $user->specialization_label,
+                'experience' => $user->experience_text,
                 'is_active' => $isActive,
                 'status_label' => $isActive ? __('labels.active') : __('labels.inactive'),
                 'profile_pic' => $user->profile_pic,
