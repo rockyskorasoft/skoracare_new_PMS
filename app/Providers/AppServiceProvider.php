@@ -20,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Register dr_card component
+        \Illuminate\Support\Facades\Blade::component('cards.dr_card', \App\View\Components\cards\dr_card::class);
+
         // Implicitly grant 'Super Admin' & 'Admin' roles all permissions across @can checks
         Gate::before(function ($user, $ability) {
             if ($user->hasRole(config('constants.super_admin_role_name')) || $user->hasRole(config('constants.admin_role_name'))) {

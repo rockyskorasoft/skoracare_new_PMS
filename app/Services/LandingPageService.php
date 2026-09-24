@@ -37,4 +37,10 @@ class LandingPageService
     {
         return $this->landingPageRepository->deleteDataById($id);
     }
+
+    public function getActiveLandingPages(?int $limit = null)
+    {
+        return $this->landingPageRepository->getActiveLandingPages($limit);
+    }
 }
+

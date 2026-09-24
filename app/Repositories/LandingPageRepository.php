@@ -68,4 +68,22 @@ class LandingPageRepository extends BaseRepository
 
         return $data;
     }
+
+    /**
+     * Get active landing pages with eager loaded relations.
+     */
+    public function getActiveLandingPages(?int $limit = null)
+    {
+        $query = $this->model->newQuery()
+            ->with(['doctors', 'gallery'])
+            ->where('status', 'active')
+            ->orderBy('id', 'desc');
+
+        if ($limit) {
+            $query->limit($limit);
+        }
+
+        return $query->get();
+    }
 }
+

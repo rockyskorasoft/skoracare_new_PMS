@@ -5720,9 +5720,11 @@
           <p class="empty-note" x-show="filtered.length===0">No doctors match these filters yet - try a different specialty or city.</p>
         </div> --}}
                 <div class="d-flex flex-wrap gap-4 justify-center">
+                    @forelse($landingPages ?? [] as $landingPage)
+                        <x-cards.dr_card :landing-page="$landingPage" />
+                    @empty
                         <x-cards.dr_card />
-                        <x-cards.dr_card />
-                        <x-cards.dr_card />
+                    @endforelse
                 </div>
             </div>
         </section>

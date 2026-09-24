@@ -4,10 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\LandingPage;
+use App\Repositories\LandingPageRepository;
 use Illuminate\Http\Request;
 
 class PublicLandingPageController extends Controller
 {
+    public function __construct(public LandingPageRepository $landingPageRepository)
+    {
+    }
+
+    /**
+     * Show the public index / home page with active clinics / landing pages.
+     */
+    public function index()
+    {
+        $landingPages = $this->landingPageRepository->getActiveLandingPages();
+
+        return view('public.index', compact('landingPages'));
+    }
+
     /**
      * Show the public-facing landing page.
      */
