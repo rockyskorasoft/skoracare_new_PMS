@@ -76,24 +76,30 @@
           --ink: #0f2a4a;
           --paper: #ffffff;
           --muted: #6b7686;
-          box-sizing: border-box;
-          padding-top: env(safe-area-inset-top, 0px);
-          padding-bottom: env(safe-area-inset-bottom, 0px);
       }
 
       .card-wrap {
           perspective: 1600px;
-          width: 260px;
-          height: 400px;
+          width: 250px;
+          height: 395px;
+          position: relative;
       }
 
-      .card {
+      /* Fix Bootstrap .card border & white background leaking behind the 3D card */
+      .card-wrap .card {
           position: relative;
           width: 100%;
           height: 100%;
-          display: block;
+          display: block !important;
           transform-style: preserve-3d;
           transition: transform .7s cubic-bezier(.4, .2, .2, 1);
+          background: transparent !important;
+          border: none !important;
+          border-radius: 18px !important;
+          box-shadow: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          overflow: visible !important;
       }
 
       .card-wrap:hover .card,
@@ -106,6 +112,7 @@
           inset: 0;
           border-radius: 18px;
           backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
           display: flex;
           flex-direction: column;
           overflow: hidden;
@@ -116,7 +123,7 @@
       .front {
           background: linear-gradient(160deg, var(--navy-1), var(--navy-2) 70%);
           color: #fff;
-          padding: 26px 22px;
+          padding: 24px 18px;
           align-items: flex-start;
       }
 
@@ -206,14 +213,6 @@
           display: inline-block;
       }
 
-      .front-curve {
-          margin-top: auto;
-          height: 46px;
-          background: linear-gradient(90deg, var(--gold), #f1d98a);
-          opacity: .9;
-          clip-path: ellipse(70% 100% at 30% 100%);
-      }
-
       /* ---------- BACK (light) ---------- */
       .back {
           background: var(--paper);
@@ -236,6 +235,16 @@
           background-color: #fff;
           outline: 8px solid #fff;
           box-shadow: 0 0 0 1px #eee;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+      }
+
+      .qr img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
       }
 
       .back-title {
@@ -252,7 +261,7 @@
           max-width: 190px;
       }
 
-      .btn {
+      .card-wrap .card-btn {
           width: 100%;
           max-width: 200px;
           text-align: center;
@@ -267,19 +276,19 @@
           gap: 6px;
       }
 
-      .btn-outline {
+      .card-wrap .card-btn-outline {
           border: 1.4px solid var(--navy-1);
           color: var(--navy-1);
           background: transparent;
       }
 
-      .btn-solid {
+      .card-wrap .card-btn-solid {
           background: var(--navy-1);
           color: #fff;
           border: 1.4px solid var(--navy-1);
       }
 
-      .btn:hover {
+      .card-wrap .card-btn:hover {
           opacity: .85;
       }
 
@@ -314,21 +323,23 @@
                       <span><i class="dot"></i>{{ $tag }}</span>
                   @endforeach
               </div>
-              <div class="front-curve"></div>
           </div>
 
           <div class="face back">
-              <div class="qr" role="img" aria-label="QR code to profile"></div>
+              <div class="qr" role="img" aria-label="QR code to profile">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ rawurlencode($profileUrl) }}" alt="QR Code" loading="lazy">
+              </div>
               <div class="back-title">{{ $backTitle }}</div>
               <div class="back-sub">{{ $backSub }}</div>
-              <a class="btn btn-outline" href="{{ $shareUrl }}" target="_blank" rel="noopener">
+              <a class="card-btn card-btn-outline" href="{{ $shareUrl }}" target="_blank" rel="noopener">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:2px;">
                       <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
                   </svg> Share
               </a>
-              <a class="btn btn-solid" href="{{ $profileUrl }}" target="_blank"
+              <a class="card-btn card-btn-solid" href="{{ $profileUrl }}" target="_blank"
                   rel="noopener">Visit Profile</a>
           </div>
 
       </div>
   </div>
+

@@ -5604,6 +5604,19 @@
             flex-wrap: wrap;
             margin-top: 8px
         }
+
+        .dr-cards-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            width: 100%;
+        }
+
+        .dr-card-col {
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 
@@ -5612,10 +5625,10 @@
     <!-- ================= HEADER (clean) ================= -->
     <header class="header">
         <div class="wrap">
-            <a href="index.php" class="logo"><img src="{{ Vite::asset(config('constants.company_logo')) }}"
+            <a href="{{ route('public.home') }}" class="logo"><img src="{{ Vite::asset(config('constants.company_logo')) }}"
                     alt="PMS" class="logo-img"></a>
             <div class="head-right">
-                <a href="#register-form" class="btn btn-solid head-login">Login</a>
+                <a href="{{ route('login') }}" class="btn btn-solid head-login">Login</a>
                 <button class="menu-btn" @click="mobileOpen=!mobileOpen" aria-label="Toggle menu"
                     :aria-expanded="mobileOpen">
                     <span class="hb" :class="{ x: mobileOpen }"><i></i><i></i><i></i></span>
@@ -5632,29 +5645,93 @@
             <a href="#plans" @click="mobileOpen=false">Plans</a>
             <a href="#doctors" @click="mobileOpen=false">Community</a>
             <a href="#faq" @click="mobileOpen=false">FAQ</a>
-            <a href="contact.php" @click="mobileOpen=false">Contact</a>
-            <a href="#register-form" class="drawer-cta" @click="mobileOpen=false">Register as Doctor →</a>
+            <a href="#faq" @click="mobileOpen=false">Contact</a>
+            <a href="{{ route('signup') }}" class="drawer-cta" @click="mobileOpen=false">Register as Doctor →</a>
         </nav>
     </header>
 
-    <div x-data="{
-        doctors: [{ & quot;id & quot;: 1, & quot;name & quot;: & quot;Dr.Rajesh Sharma & quot;, & quot;spec & quot;: & quot;Orthopedic & quot;, & quot;city & quot;: & quot;Jaipur & quot;, & quot;color & quot;: & quot;#2447B2&quot;,&quot;init&quot;:&quot;RS&quot;,&quot;exp&quot;:&quot;12 yrs&quot;,&quot;rating&quot;:&quot;4.9&quot;,&quot;clinic&quot;:&quot;Sharma Ortho Clinic&quot;,&quot;phone&quot;:&quot;919000000001&quot;,&quot;about&quot;:&quot;Dr. Rajesh Sharma is an orthopedic surgeon with over a decade of experience treating joint, spine and sports injuries. Known for a calm, detailed approach with patients of all ages.&quot;,&quot;services&quot;:[&quot;Website&quot;,&quot;WhatsApp&quot;,&quot;Local SEO&quot;,&quot;Reviews&quot;]},{&quot;id&quot;:2,&quot;name&quot;:&quot;Dr. Anita Patel&quot;,&quot;spec&quot;:&quot;Dentist&quot;,&quot;city&quot;:&quot;Ahmedabad&quot;,&quot;color&quot;:&quot;# 0 F8A73 & quot;, & quot;init & quot;: & quot;AP & quot;, & quot;exp & quot;: & quot;8 yrs & quot;, & quot;rating & quot;: & quot;4.8 & quot;, & quot;clinic & quot;: & quot;Patel Dental Care & quot;, & quot;phone & quot;: & quot;919000000002 & quot;, & quot;about & quot;: & quot;Dr.Anita Patel runs a modern dental practice focused on preventive care, cosmetic dentistry and gentle treatment for anxious patients. & quot;, & quot;services & quot;: [ & quot;Website & quot;, & quot;Social Media & quot;, & quot;Reviews & quot;] }, { & quot;id & quot;: 3, & quot;name & quot;: & quot;Dr.Neha Kulkarni & quot;, & quot;spec & quot;: & quot;Physiotherapist & quot;, & quot;city & quot;: & quot;Pune & quot;, & quot;color & quot;: & quot;#D93B4A & quot;, & quot;init & quot;: & quot;NK & quot;, & quot;exp & quot;: & quot;6 yrs & quot;, & quot;rating & quot;: & quot;5.0 & quot;, & quot;clinic & quot;: & quot;Kulkarni Physiotherapy & amp;Rehab & quot;, & quot;phone & quot;: & quot;919000000003 & quot;, & quot;about & quot;: & quot;Dr.Neha Kulkarni specialises in sports rehabilitation and post - surgery physiotherapy, helping patients recover mobility with personalised recovery plans. & quot;, & quot;services & quot;: [ & quot;Website & quot;, & quot;WhatsApp & quot;, & quot;Local SEO & quot;] }, { & quot;id & quot;: 4, & quot;name & quot;: & quot;Dr.Sanjay Mehta & quot;, & quot;spec & quot;: & quot;Orthopedic & quot;, & quot;city & quot;: & quot;Indore & quot;, & quot;color & quot;: & quot;#7A5AF8&quot;,&quot;init&quot;:&quot;SM&quot;,&quot;exp&quot;:&quot;15 yrs&quot;,&quot;rating&quot;:&quot;4.7&quot;,&quot;clinic&quot;:&quot;Mehta Bone &amp; Joint Hospital&quot;,&quot;phone&quot;:&quot;919000000004&quot;,&quot;about&quot;:&quot;Dr. Sanjay Mehta has 15 years of experience in joint replacement and trauma surgery, and is a trusted name for orthopedic care in Indore.&quot;,&quot;services&quot;:[&quot;Website&quot;,&quot;Paid Ads&quot;,&quot;Reviews&quot;]},{&quot;id&quot;:5,&quot;name&quot;:&quot;Dr. Priya Verma&quot;,&quot;spec&quot;:&quot;Dentist&quot;,&quot;city&quot;:&quot;Lucknow&quot;,&quot;color&quot;:&quot;# E07B2A & quot;, & quot;init & quot;: & quot;PV & quot;, & quot;exp & quot;: & quot;9 yrs & quot;, & quot;rating & quot;: & quot;4.9 & quot;, & quot;clinic & quot;: & quot;Verma Smile Studio & quot;, & quot;phone & quot;: & quot;919000000005 & quot;, & quot;about & quot;: & quot;Dr.Priya Verma focuses on cosmetic and restorative dentistry, helping patients across Lucknow get confident, healthy smiles. & quot;, & quot;services & quot;: [ & quot;Website & quot;, & quot;WhatsApp & quot;, & quot;Social Media & quot;] }, { & quot;id & quot;: 6, & quot;name & quot;: & quot;Dr.Amit Singh & quot;, & quot;spec & quot;: & quot;Physiotherapist & quot;, & quot;city & quot;: & quot;Delhi & quot;, & quot;color & quot;: & quot;#0F8A73&quot;,&quot;init&quot;:&quot;AS&quot;,&quot;exp&quot;:&quot;7 yrs&quot;,&quot;rating&quot;:&quot;4.8&quot;,&quot;clinic&quot;:&quot;Singh Physio Point&quot;,&quot;phone&quot;:&quot;919000000006&quot;,&quot;about&quot;:&quot;Dr. Amit Singh works with patients recovering from injury and chronic pain, combining manual therapy with structured exercise plans.&quot;,&quot;services&quot;:[&quot;Website&quot;,&quot;Local SEO&quot;,&quot;Reviews&quot;]},{&quot;id&quot;:7,&quot;name&quot;:&quot;Dr. Kavita Rao&quot;,&quot;spec&quot;:&quot;Gynecologist&quot;,&quot;city&quot;:&quot;Hyderabad&quot;,&quot;color&quot;:&quot;# 2447 B2 & quot;, & quot;init & quot;: & quot;KR & quot;, & quot;exp & quot;: & quot;14 yrs & quot;, & quot;rating & quot;: & quot;5.0 & quot;, & quot;clinic & quot;: & quot;Rao Women & #039;s Clinic&quot;,&quot;phone&quot;:&quot;919000000007&quot;,&quot;about&quot;:&quot;Dr. Kavita Rao is a senior gynecologist with 14 years of experience in women&# 039;s health, pregnancy care and minimally invasive procedures. & quot;, & quot;services & quot;: [ & quot;Website & quot;, & quot;WhatsApp & quot;, & quot;Paid Ads & quot;] }, { & quot;id & quot;: 8, & quot;name & quot;: & quot;Dr.Rohit Bansal & quot;, & quot;spec & quot;: & quot;Dermatologist & quot;, & quot;city & quot;: & quot;Chandigarh & quot;, & quot;color & quot;: & quot;#D93B4A & quot;, & quot;init & quot;: & quot;RB & quot;, & quot;exp & quot;: & quot;10 yrs & quot;, & quot;rating & quot;: & quot;4.9 & quot;, & quot;clinic & quot;: & quot;Bansal Skin & amp;Hair Clinic & quot;, & quot;phone & quot;: & quot;919000000008 & quot;, & quot;about & quot;: & quot;Dr.Rohit Bansal treats a wide range of skin, hair and cosmetic concerns using evidence - based dermatology and modern in -clinic procedures. & quot;, & quot;services & quot;: [ & quot;Website & quot;, & quot;Social Media & quot;, & quot;Reviews & quot;] }, { & quot;id & quot;: 9, & quot;name & quot;: & quot;Dr.Meera Desai & quot;, & quot;spec & quot;: & quot;Pediatrician & quot;, & quot;city & quot;: & quot;Mumbai & quot;, & quot;color & quot;: & quot;#0EA5A5&quot;,&quot;init&quot;:&quot;MD&quot;,&quot;exp&quot;:&quot;11 yrs&quot;,&quot;rating&quot;:&quot;4.9&quot;,&quot;clinic&quot;:&quot;Desai Child Care&quot;,&quot;phone&quot;:&quot;919000000009&quot;,&quot;about&quot;:&quot;Dr. Meera Desai has spent over a decade caring for infants and children, and is known for her patient, parent-friendly approach.&quot;,&quot;services&quot;:[&quot;Website&quot;,&quot;WhatsApp&quot;,&quot;Local SEO&quot;]},{&quot;id&quot;:10,&quot;name&quot;:&quot;Dr. Vikram Kapoor&quot;,&quot;spec&quot;:&quot;General Physician&quot;,&quot;city&quot;:&quot;Jaipur&quot;,&quot;color&quot;:&quot;# E07B2A & quot;, & quot;init & quot;: & quot;VK & quot;, & quot;exp & quot;: & quot;13 yrs & quot;, & quot;rating & quot;: & quot;4.8 & quot;, & quot;clinic & quot;: & quot;Kapoor Family Clinic & quot;, & quot;phone & quot;: & quot;919000000010 & quot;, & quot;about & quot;: & quot;Dr.Vikram Kapoor provides comprehensive primary care for the whole family, with a focus on preventive health and chronic disease management. & quot;, & quot;services & quot;: [ & quot;Website & quot;, & quot;Reviews & quot;] }],
-        activeSpec: 'All',
-        activeCity: '',
-        term: '',
-        sortBy: 'rating',
-        cats: [ & quot;All & quot;, & quot;Orthopedic & quot;, & quot;Dentist & quot;, & quot;Physiotherapist & quot;, & quot;Gynecologist & quot;, & quot;Dermatologist & quot;, & quot;Pediatrician & quot;, & quot;General Physician & quot;],
-        cities: [ & quot;Jaipur & quot;, & quot;Ahmedabad & quot;, & quot;Pune & quot;, & quot;Indore & quot;, & quot;Lucknow & quot;, & quot;Delhi & quot;, & quot;Hyderabad & quot;, & quot;Chandigarh & quot;, & quot;Mumbai & quot;],
-        get filtered() {
-            let list = this.doctors;
-            if (this.activeSpec !== 'All') list = list.filter(d => d.spec === this.activeSpec);
-            if (this.activeCity) list = list.filter(d => d.city === this.activeCity);
-            if (this.term.trim() !== '') {
-                const t = this.term.trim().toLowerCase();
-                list = list.filter(d => d.name.toLowerCase().includes(t) || d.spec.toLowerCase().includes(t) || d.city.toLowerCase().includes(t) || d.clinic.toLowerCase().includes(t));
+    @php
+        $cardsData = [];
+        $extractedCities = [];
+        foreach ($landingPages ?? [] as $lp) {
+            $docNames = $lp->doctors ? $lp->doctors->pluck('doctor_name')->toArray() : [];
+            $docSpecs = $lp->doctors ? $lp->doctors->pluck('specialization')->toArray() : [];
+            $serviceList = [];
+            if (!empty($lp->services)) {
+                $raw = preg_replace('/<\s*(?:br|p|li)[^>]*>/i', "\n", $lp->services);
+                $clean = strip_tags(html_entity_decode($raw, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+                $serviceList = array_values(array_filter(array_map('trim', preg_split('/[\r\n,]+/', $clean))));
             }
-            list = [...list].sort((a, b) => this.sortBy === 'rating' ? (b.rating - a.rating) : (parseInt(b.exp) - parseInt(a.exp)));
-            return list;
+            // Parse city from address if possible
+            $detectedCity = '';
+            if (!empty($lp->address)) {
+                $parts = array_map('trim', explode(',', $lp->address));
+                if (count($parts) >= 2) {
+                    $cand = $parts[count($parts) - 2];
+                    if (preg_match('/\d{6}/', $cand) && count($parts) >= 3) {
+                        $cand = $parts[count($parts) - 3];
+                    }
+                    $detectedCity = trim(preg_replace('/\b(UP|Bihar|Delhi|Haryana|India|State)\b/i', '', $cand));
+                    $detectedCity = trim(preg_replace('/-\s*\d+/', '', $detectedCity));
+                }
+                if ($detectedCity && !in_array($detectedCity, $extractedCities)) {
+                    $extractedCities[] = $detectedCity;
+                }
+            }
+
+            $cardsData[] = [
+                'id' => $lp->id,
+                'name' => $lp->clinic_name ?? '',
+                'address' => $lp->address ?? '',
+                'city' => $detectedCity,
+                'rating' => (float)($lp->clinic_rating ?? 5.0),
+                'doctors' => $docNames,
+                'specialties' => array_values(array_unique(array_merge($docSpecs, $serviceList))),
+            ];
+        }
+        $popularCities = ['New Delhi', 'Noida', 'Aurangabad', 'Delhi', 'Mumbai', 'Jaipur', 'Ahmedabad', 'Pune', 'Lucknow', 'Chandigarh', 'Hyderabad'];
+        $dropdownCities = array_values(array_unique(array_merge($extractedCities, $popularCities)));
+    @endphp
+
+    <div x-data="{
+        term: '',
+        activeCity: '',
+        activeSpec: 'All',
+        sortBy: 'rating',
+        items: {{ json_encode($cardsData) }},
+        cats: ['All', 'General Medicine', 'Cardiology', 'Pediatrician', 'Physiotherapy', 'Orthopedic', 'Surgery', 'Dentist'],
+        cities: {{ json_encode($dropdownCities) }},
+        isVisible(item) {
+            if (!item) return false;
+            // Specialty category filter
+            if (this.activeSpec !== 'All') {
+                const specTarget = this.activeSpec.toLowerCase();
+                const inSpecs = (item.specialties || []).some(s => s.toLowerCase().includes(specTarget));
+                const inName = (item.name || '').toLowerCase().includes(specTarget);
+                if (!inSpecs && !inName) return false;
+            }
+            // City / Location filter
+            if (this.activeCity && this.activeCity.trim() !== '') {
+                const cityTarget = this.activeCity.toLowerCase().trim();
+                const inAddr = (item.address || '').toLowerCase().includes(cityTarget);
+                const inCity = (item.city || '').toLowerCase().includes(cityTarget);
+                const inName = (item.name || '').toLowerCase().includes(cityTarget);
+                if (!inAddr && !inCity && !inName) return false;
+            }
+            // Search term keyword
+            if (this.term && this.term.trim() !== '') {
+                const q = this.term.toLowerCase().trim();
+                const inName = (item.name || '').toLowerCase().includes(q);
+                const inAddr = (item.address || '').toLowerCase().includes(q);
+                const inCity = (item.city || '').toLowerCase().includes(q);
+                const inDocs = (item.doctors || []).some(d => d.toLowerCase().includes(q));
+                const inSpecs = (item.specialties || []).some(s => s.toLowerCase().includes(q));
+                if (!inName && !inAddr && !inCity && !inDocs && !inSpecs) return false;
+            }
+            return true;
+        },
+        get visibleCount() {
+            return this.items.filter(i => this.isVisible(i)).length;
         }
     }">
         <section class="page-hero">
@@ -5668,7 +5745,7 @@
                             <option :value="c" x-text="c"></option>
                         </template>
                     </select>
-                    <input type="text" x-model="term" placeholder="Looking for… e.g. Orthopedic, Dentist, Dr. name">
+                    <input type="text" x-model="term" placeholder="Looking for… e.g. Orthopedic, Dentist, Dr. name, city">
                     <button type="submit" class="btn btn-solid">Search</button>
                 </form>
             </div>
@@ -5688,43 +5765,36 @@
                         </template>
                     </select>
                     <input class="fp-search" type="text" x-model="term"
-                        placeholder="Search by name, specialty or clinic…">
+                        placeholder="Search by clinic name, doctor, specialty or location…">
                     <select x-model="sortBy">
                         <option value="rating">Sort: Top rated</option>
-                        <option value="exp">Sort: Most experienced</option>
                     </select>
                 </div>
 
                 <p class="results-count"
-                    x-text="filtered.length + ' doctor' + (filtered.length===1?'':'s') + ' found'"></p>
+                    x-text="visibleCount + ' clinic' + (visibleCount===1?'':'s') + ' & doctor' + (visibleCount===1?'':'s') + ' found'"></p>
 
-                {{-- <div class="doc-grid">
-          <template x-for="d in filtered" :key="d.id">
-            <div class="doc-card">
-              <span class="doc-verified">✓ Verified</span>
-              <div class="doc-head">
-                <div class="doc-av" :style="'background:'+d.color" x-text="d.init"></div>
-                <div class="doc-id">
-                  <h3 x-text="d.name"></h3>
-                  <div class="spec" x-text="d.spec"></div>
-                </div>
-              </div>
-              <div class="doc-meta">
-                <span class="mi star">★ <b x-text="d.rating"></b></span>
-                <span class="mi"><b x-text="d.exp"></b></span>
-                <span class="mi">📍 <span x-text="d.city"></span></span>
-              </div>
-              <a :href="'doctor-details.php?id='+d.id" class="doc-view">View Profile →</a>
-            </div>
-          </template>
-          <p class="empty-note" x-show="filtered.length===0">No doctors match these filters yet - try a different specialty or city.</p>
-        </div> --}}
-                <div class="d-flex flex-wrap gap-4 justify-center">
+                <div class="dr-cards-row">
                     @forelse($landingPages ?? [] as $landingPage)
-                        <x-cards.dr_card :landing-page="$landingPage" />
+                        <div class="dr-card-col"
+                             x-show="isVisible(items.find(i => i.id === {{ $landingPage->id }}))"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100">
+                            <x-cards.dr_card :landing-page="$landingPage" />
+                        </div>
                     @empty
-                        <x-cards.dr_card />
+                        <div class="dr-card-col">
+                            <x-cards.dr_card />
+                        </div>
                     @endforelse
+                </div>
+
+                <div class="empty-note text-center py-5 my-4" x-show="visibleCount === 0" x-cloak style="color: var(--ink-soft); font-size: 16px;">
+                    <div style="font-size: 38px; margin-bottom: 8px;">🔍</div>
+                    <strong>No clinics or doctors found matching your filters.</strong>
+                    <p class="mt-2" style="font-size: 14px;">Try searching for a different keyword or selecting "All Locations".</p>
+                    <button type="button" class="btn btn-solid mt-3" @click="term = ''; activeCity = ''; activeSpec = 'All';">Reset Filters</button>
                 </div>
             </div>
         </section>
@@ -6400,15 +6470,15 @@
     <!-- ================= FOOTER ================= -->
     <footer class="footer">
         <div class="wrap">
-            <a href="index.php" class="logo"><img src="{{ Vite::asset(config('constants.company_logo')) }}"
+            <a href="{{ route('public.home') }}" class="logo"><img src="{{ Vite::asset(config('constants.company_logo')) }}"
                     alt="PMS" class="logo-img" style="height:32px"></a>
             <div class="links">
                 <a href="#services">Services</a>
                 <a href="#online">Practice Online</a>
                 <a href="#doctors">Doctors</a>
-                <a href="#register-form">Register</a>
+                <a href="{{ route('signup') }}">Register</a>
                 <a href="#faq">FAQ</a>
-                <a href="contact.php">Contact</a>
+                <a href="#faq">Contact</a>
             </div>
             <p class="small">© 2026 PMS. Marketing, prescribed for doctors.</p>
         </div>
