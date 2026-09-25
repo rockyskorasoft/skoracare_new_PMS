@@ -1776,6 +1776,62 @@
             transform: rotate(-4deg);
         }
 
+        /* ---------- registration modal ---------- */
+        .reg-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(19, 52, 59, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .reg-modal-dialog {
+            position: relative;
+            width: 100%;
+            max-width: 720px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            border-radius: 18px;
+            box-shadow: 0 24px 60px rgba(19, 52, 59, .3);
+        }
+
+        .reg-modal-dialog .reg-pad {
+            margin: 0;
+            max-width: 100%;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        .reg-modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            font-size: 26px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            line-height: 1;
+            transition: background .2s, transform .2s;
+        }
+
+        .reg-modal-close:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.08);
+        }
+
         /* ---------- plans / membership (marketplace) ---------- */
         .plans-sec {
             background: var(--paper-2)
@@ -5620,7 +5676,35 @@
     </style>
 </head>
 
-<body x-data="{ mobileOpen: false }">
+<body x-data="{
+    mobileOpen: false,
+    regModalOpen: false,
+    f: { name: '', spec: '', clinic: '', city: '', phone: '', email: '', exp: '', notes: '' },
+    services: ['Website', 'WhatsApp', 'Social Media', 'Local SEO', 'Paid Ads', 'Reviews'],
+    picked: [],
+    consent: false,
+    errors: {},
+    done: false,
+    toggle(s) { this.picked.includes(s) ? this.picked = this.picked.filter(x => x !== s) : this.picked.push(s) },
+    submit() {
+        this.errors = {};
+        if (!this.f.name.trim()) this.errors.name = true;
+        if (!this.f.spec) this.errors.spec = true;
+        if (!this.f.city.trim()) this.errors.city = true;
+        if (!/^[0-9+\-\s]{8,}$/.test(this.f.phone)) this.errors.phone = true;
+        if (!this.consent) this.errors.consent = true;
+        if (Object.keys(this.errors).length === 0) {
+            this.done = true;
+        }
+    },
+    openRegModal() {
+        this.regModalOpen = true;
+        this.mobileOpen = false;
+    },
+    closeRegModal() {
+        this.regModalOpen = false;
+    }
+}">
 
     <!-- ================= HEADER (clean) ================= -->
     <header class="header">
@@ -5646,7 +5730,7 @@
             <a href="#doctors" @click="mobileOpen=false">Community</a>
             <a href="#faq" @click="mobileOpen=false">FAQ</a>
             <a href="#faq" @click="mobileOpen=false">Contact</a>
-            <a href="{{ route('signup') }}" class="drawer-cta" @click="mobileOpen=false">Register as Doctor →</a>
+            <a href="#" class="drawer-cta" @click.prevent="openRegModal()">Register as Doctor →</a>
         </nav>
     </header>
 
@@ -5917,7 +6001,7 @@
                     <li><span class="tick">✓</span> A 4.9★ Google profile that patients trust before they call.</li>
                     <li><span class="tick">✓</span> Reels and posts that keep your name in the feed all week.</li>
                 </ul>
-                <div style="margin-top:26px"><a href="#register" class="btn btn-solid">See it for your clinic →</a>
+                <div style="margin-top:26px"><a href="#" class="btn btn-solid" @click.prevent="openRegModal()">See it for your clinic →</a>
                 </div>
             </div>
         </div>
@@ -6017,7 +6101,7 @@
                         <li class="off"><span class="tk">–</span> Marketing services</li>
                         <li class="off"><span class="tk">–</span> Campaign management</li>
                     </ul>
-                    <a href="#register-form" class="btn btn-ghost">Join free</a>
+                    <a href="#" class="btn btn-ghost" @click.prevent="openRegModal()">Join free</a>
                 </div>
 
                 <div class="plan featured reveal">
@@ -6032,7 +6116,7 @@
                         <li><span class="tk">✓</span> 3 social posts / week</li>
                         <li><span class="tk">✓</span> Monthly growth report</li>
                     </ul>
-                    <a href="#register-form" class="btn btn-solid">Choose Growth</a>
+                    <a href="#" class="btn btn-solid" @click.prevent="openRegModal()">Choose Growth</a>
                 </div>
 
                 <div class="plan reveal">
@@ -6046,7 +6130,7 @@
                         <li><span class="tk">✓</span> Reputation &amp; review management</li>
                         <li><span class="tk">✓</span> Priority support</li>
                     </ul>
-                    <a href="#register-form" class="btn btn-ghost">Choose Pro</a>
+                    <a href="#" class="btn btn-ghost" @click.prevent="openRegModal()">Choose Pro</a>
                 </div>
             </div>
             <p class="plans-note"><span class="hand">Not sure which fits?</span> Join free and our team helps you
@@ -6062,7 +6146,7 @@
                 <h2>Specialised, and still affordable</h2>
                 <p>Big agencies are expensive and generic. Cheap freelancers don’t understand healthcare. PMS is the
                     rare corner: built only for doctors, priced for a single clinic.</p>
-                <div style="margin-top:24px"><a href="#register" class="btn btn-red">Get on the map →</a></div>
+                <div style="margin-top:24px"><a href="#" class="btn btn-red" @click.prevent="openRegModal()">Get on the map →</a></div>
             </div>
             <div class="quad reveal" role="img"
                 aria-label="Positioning chart: PMS is both healthcare-specialised and affordable">
@@ -6292,7 +6376,7 @@
                 <h2>Join the community in 3 minutes</h2>
                 <p>Become a member of India’s growing doctor community. Free listing, a verified profile in the
                     marketplace, and access to every marketing service - pick what you need.</p>
-                <a href="#register-form" class="btn btn-red btn-lg">Join the Community - Free →</a>
+                <a href="#" class="btn btn-red btn-lg" @click.prevent="openRegModal()">Join the Community - Free →</a>
             </div>
             <div class="steps reveal">
                 <div class="step">
@@ -6311,40 +6395,68 @@
         </div>
     </section>
 
-    <!-- ================= REGISTRATION FORM (prescription pad) ================= -->
-    <section class="section reg-form-sec" id="register-form" x-data="{
-        f: { name: '', spec: '', clinic: '', city: '', phone: '', email: '', exp: '', notes: '' },
-        services: ['Website', 'WhatsApp', 'Social Media', 'Local SEO', 'Paid Ads', 'Reviews'],
-        picked: [],
-        consent: false,
-        errors: {},
-        done: false,
-        toggle(s) { this.picked.includes(s) ? this.picked = this.picked.filter(x => x !== s) : this.picked.push(s) },
-        submit() {
-            this.errors = {};
-            if (!this.f.name.trim()) this.errors.name = true;
-            if (!this.f.spec) this.errors.spec = true;
-            if (!this.f.city.trim()) this.errors.city = true;
-            if (!/^[0-9+\-\s]{8,}$/.test(this.f.phone)) this.errors.phone = true;
-            if (!this.consent) this.errors.consent = true;
-            if (Object.keys(this.errors).length === 0) { this.done = true;
-                window.scrollTo({ top: document.getElementById('register-form').offsetTop - 40, behavior: 'smooth' }); }
-        }
-    }">
-        <span class="spark" style="top:12%;left:8%">✦</span>
-        <span class="spark r" style="top:20%;right:10%">✱</span>
-        <span class="spark t" style="bottom:14%;left:14%">✧</span>
+    <!-- ================= FINAL CTA ================= -->
+    <section class="section final">
+        <span class="spark" style="top:22%;left:12%">✦</span>
+        <span class="spark r" style="top:32%;right:14%">✱</span>
+        <span class="spark t" style="bottom:26%;left:20%">✦</span>
+        <span class="spark" style="bottom:20%;right:22%">✧</span>
+        <span class="spark r" style="top:16%;left:44%">✧</span>
         <div class="wrap">
-            <div class="section-head center reveal">
-                <span class="hand hand-note">Fill it like a prescription -</span>
-                <h2>Doctor registration</h2>
-                <p>Free to join. Takes 3 minutes. Our team reviews every entry before it goes live.</p>
+            <span class="hand">Ready when you are, doctor.</span>
+            <h2>Let’s write your <span class="hl">growth prescription</span></h2>
+            <div class="cta-row">
+                <a href="#" class="btn btn-red btn-lg" @click.prevent="openRegModal()">Register Your Practice →</a>
+                <a href="#doctors" class="btn btn-ghost btn-lg">Browse Doctors</a>
             </div>
+            <p class="sub">Free to register · No lock-in · Built only for doctors</p>
+        </div>
+    </section>
 
-            <div class="reg-pad reveal">
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="wrap">
+            <a href="{{ route('public.home') }}" class="logo"><img src="{{ Vite::asset(config('constants.company_logo')) }}"
+                    alt="PMS" class="logo-img" style="height:32px"></a>
+            <div class="links">
+                <a href="#services">Services</a>
+                <a href="#online">Practice Online</a>
+                <a href="#doctors">Doctors</a>
+                <a href="#" @click.prevent="openRegModal()">Register</a>
+                <a href="#faq">FAQ</a>
+                <a href="#faq">Contact</a>
+            </div>
+            <p class="small">© 2026 PMS. Marketing, prescribed for doctors.</p>
+        </div>
+    </footer>
+
+    <!-- ================= REGISTRATION MODAL ================= -->
+    <div class="reg-modal-backdrop"
+         x-show="regModalOpen"
+         x-cloak
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         @keydown.escape.window="closeRegModal()"
+         @click.self="closeRegModal()">
+
+        <div class="reg-modal-dialog"
+             x-show="regModalOpen"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95 translateY-4"
+             x-transition:enter-end="opacity-100 scale-100 translateY-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 scale-100 translateY-0"
+             x-transition:leave-end="opacity-0 scale-95 translateY-4">
+
+            <button type="button" class="reg-modal-close" @click="closeRegModal()" aria-label="Close modal">&times;</button>
+
+            <div class="reg-pad">
                 <div class="pad-head">
-                    <div class="ph-title">PMS Registration<small>Growth Clinic for Doctors · New Patient... we mean,
-                            New Doctor</small></div>
+                    <div class="ph-title">PMS Registration<small>Growth Clinic for Doctors · New Patient... we mean, New Doctor</small></div>
                     <div class="rx-big">℞</div>
                 </div>
 
@@ -6353,8 +6465,7 @@
                     <div class="reg-inner" x-show="!done">
                         <div class="reg-grid">
                             <div class="reg-field full" :class="{ err: errors.name }">
-                                <label>Full Name <span class="rq">*</span> <span class="hint">- e.g. Dr. Rajesh
-                                        Sharma</span></label>
+                                <label>Full Name <span class="rq">*</span> <span class="hint">- e.g. Dr. Rajesh Sharma</span></label>
                                 <input type="text" x-model="f.name" placeholder="Dr. Your Name">
                                 <span class="msg">Please enter your name</span>
                             </div>
@@ -6414,15 +6525,13 @@
                         </div>
 
                         <div class="reg-field full" style="margin-top:20px">
-                            <label>Anything else? <span class="hint">- goals, current website,
-                                    questions</span></label>
+                            <label>Anything else? <span class="hint">- goals, current website, questions</span></label>
                             <textarea x-model="f.notes" placeholder="Tell us a little about your practice and what you'd like to grow…"></textarea>
                         </div>
 
                         <label class="reg-consent" :style="errors.consent ? 'color:var(--rx)' : ''">
                             <input type="checkbox" x-model="consent">
-                            <span>I agree to be contacted by PMS about my registration and a growth plan. No spam,
-                                promise.</span>
+                            <span>I agree to be contacted by PMS about my registration and a growth plan. No spam, promise.</span>
                         </label>
 
                         <div class="reg-footer">
@@ -6430,8 +6539,7 @@
                                 <div class="line"><span class="sig" x-text="f.name || ''"></span></div>
                                 <small>Doctor's signature</small>
                             </div>
-                            <button class="btn btn-red btn-lg reg-submit" @click="submit()">Submit Registration
-                                ℞</button>
+                            <button class="btn btn-red btn-lg reg-submit" @click="submit()">Submit Registration ℞</button>
                         </div>
                     </div>
 
@@ -6439,50 +6547,16 @@
                     <div class="reg-success" x-show="done" x-cloak>
                         <div class="tick-big">✓</div>
                         <h3>Registration received, <span x-text="f.name || 'Doctor'"></span>!</h3>
-                        <p>Our team will verify your details and reach out on WhatsApp within 24 hours with your profile
-                            link and a growth prescription for your specialty.</p>
+                        <p>Our team will verify your details and reach out on WhatsApp within 24 hours with your profile link and a growth prescription for your specialty.</p>
                         <div class="stamp">Prescription filed ✓</div>
+                        <div style="margin-top: 24px; text-align: center;">
+                            <button type="button" class="btn btn-solid" @click="closeRegModal()">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
-
-    <!-- ================= FINAL CTA ================= -->
-    <section class="section final">
-        <span class="spark" style="top:22%;left:12%">✦</span>
-        <span class="spark r" style="top:32%;right:14%">✱</span>
-        <span class="spark t" style="bottom:26%;left:20%">✦</span>
-        <span class="spark" style="bottom:20%;right:22%">✧</span>
-        <span class="spark r" style="top:16%;left:44%">✧</span>
-        <div class="wrap">
-            <span class="hand">Ready when you are, doctor.</span>
-            <h2>Let’s write your <span class="hl">growth prescription</span></h2>
-            <div class="cta-row">
-                <a href="#register-form" class="btn btn-red btn-lg">Register Your Practice →</a>
-                <a href="#doctors" class="btn btn-ghost btn-lg">Browse Doctors</a>
-            </div>
-            <p class="sub">Free to register · No lock-in · Built only for doctors</p>
-        </div>
-    </section>
-
-    <!-- ================= FOOTER ================= -->
-    <footer class="footer">
-        <div class="wrap">
-            <a href="{{ route('public.home') }}" class="logo"><img src="{{ Vite::asset(config('constants.company_logo')) }}"
-                    alt="PMS" class="logo-img" style="height:32px"></a>
-            <div class="links">
-                <a href="#services">Services</a>
-                <a href="#online">Practice Online</a>
-                <a href="#doctors">Doctors</a>
-                <a href="{{ route('signup') }}">Register</a>
-                <a href="#faq">FAQ</a>
-                <a href="#faq">Contact</a>
-            </div>
-            <p class="small">© 2026 PMS. Marketing, prescribed for doctors.</p>
-        </div>
-    </footer>
+    </div>
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
