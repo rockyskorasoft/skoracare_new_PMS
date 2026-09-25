@@ -15,33 +15,36 @@
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
+        {{-- favicon --}}
+            <link rel="icon" type="image/png" href="{{ Vite::asset(config('constants.favicon')) }}">
+
     <style>
         :root {
             --paper: #ffffff;
             /* pure white */
-            --paper-2: #F3F9FA;
+            --paper-2: #F4F9F6;
             /* whisper-light teal for section separation */
-            --ink: #13343B;
+            --ink: #1B5E3A;
             /* deep teal-slate text */
-            --ink-soft: #5C737A;
-            --pen: #0E606E;
+            --ink-soft: #4A6356;
+            --pen: #2E7D5C;
             /* teal (primary) */
-            --pen-deep: #0A4A55;
+            --pen-deep: #1B5E3A;
             --rx: #FF9700;
             /* orange accent */
-            --mint: #E4F2F1;
+            --mint: #A8D5BA;
             /* light teal chip */
-            --teal: #0E9488;
+            --teal: #4B9B6E;
             /* verified / success teal */
-            --line: #E4EDEE;
-            --marker: #FFDE59;
+            --line: #D8EADF;
+            --marker: #A8D5BA;
             /* highlighter yellow */
-            --violet: #8B5CF6;
-            --amber: #F59E0B;
-            --sky: #3B82F6;
+            --violet: #4B9B6E;
+            --amber: #6BBF8A;
+            --sky: #2E7D5C;
             --radius: 16px;
-            --shadow: 0 10px 30px rgba(19, 52, 59, .08);
-            --shadow-lg: 0 24px 60px rgba(19, 52, 59, .13);
+            --shadow: 0 10px 30px rgba(27, 94, 58, .08);
+            --shadow-lg: 0 24px 60px rgba(27, 94, 58, .13);
         }
 
         * {
@@ -124,7 +127,7 @@
             width: 150px;
             height: 15px;
             margin: 10px 0 0;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 15'%3E%3Cpath d='M3 9 Q 28 2 52 8 T 100 7 T 147 9' fill='none' stroke='%230E606E' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center/contain;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 15'%3E%3Cpath d='M3 9 Q 28 2 52 8 T 100 7 T 147 9' fill='none' stroke='%232E7D5C' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center/contain;
         }
 
         .section-head.center h2::after {
@@ -205,7 +208,7 @@
         .btn-solid:hover {
             background: var(--pen-deep);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(36, 71, 178, .28)
+            box-shadow: 0 8px 20px rgba(46, 125, 92, .28)
         }
 
         .btn-ghost {
@@ -257,11 +260,11 @@
             gap: 10px
         }
 
-        .logo-img {
+        /* .logo-img {
             height: 40px;
             width: auto;
             display: block
-        }
+        } */
 
         .head-right {
             display: flex;
@@ -2411,7 +2414,7 @@
             right: -2%;
             bottom: -8px;
             height: 12px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14'%3E%3Cpath d='M4 10 Q 60 2 110 7 T 196 6' fill='none' stroke='%232AA8E0' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14'%3E%3Cpath d='M4 10 Q 60 2 110 7 T 196 6' fill='none' stroke='%234B9B6E' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%;
         }
 
         .cta-center {
@@ -2760,29 +2763,29 @@
         :root {
             --paper: #ffffff;
             /* pure white */
-            --paper-2: #F3F9FA;
+            --paper-2: #F4F9F6;
             /* whisper-light teal for section separation */
-            --ink: #13343B;
+            --ink: #1B5E3A;
             /* deep teal-slate text */
-            --ink-soft: #5C737A;
-            --pen: #0E606E;
+            --ink-soft: #4A6356;
+            --pen: #2E7D5C;
             /* teal (primary) */
-            --pen-deep: #0A4A55;
+            --pen-deep: #1B5E3A;
             --rx: #FF9700;
             /* orange accent */
-            --mint: #E4F2F1;
+            --mint: #A8D5BA;
             /* light teal chip */
-            --teal: #0E9488;
+            --teal: #4B9B6E;
             /* verified / success teal */
-            --line: #E4EDEE;
-            --marker: #FFDE59;
+            --line: #D8EADF;
+            --marker: #A8D5BA;
             /* highlighter yellow */
-            --violet: #8B5CF6;
-            --amber: #F59E0B;
-            --sky: #3B82F6;
+            --violet: #4B9B6E;
+            --amber: #6BBF8A;
+            --sky: #2E7D5C;
             --radius: 16px;
-            --shadow: 0 10px 30px rgba(19, 52, 59, .08);
-            --shadow-lg: 0 24px 60px rgba(19, 52, 59, .13);
+            --shadow: 0 10px 30px rgba(27, 94, 58, .08);
+            --shadow-lg: 0 24px 60px rgba(27, 94, 58, .13);
         }
 
         * {
@@ -2865,7 +2868,7 @@
             width: 150px;
             height: 15px;
             margin: 10px 0 0;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 15'%3E%3Cpath d='M3 9 Q 28 2 52 8 T 100 7 T 147 9' fill='none' stroke='%230E606E' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center/contain;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 15'%3E%3Cpath d='M3 9 Q 28 2 52 8 T 100 7 T 147 9' fill='none' stroke='%232E7D5C' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left center/contain;
         }
 
         .section-head.center h2::after {
@@ -2946,7 +2949,8 @@
         .btn-solid:hover {
             background: var(--pen-deep);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(36, 71, 178, .28)
+            box-shadow: 0 8px 20px rgba(46, 125, 92, .28);
+            color: #fff;
         }
 
         .btn-ghost {
@@ -2999,7 +3003,7 @@
         }
 
         .logo-img {
-            height: 40px;
+            height: 60px;
             width: auto;
             display: block
         }
@@ -5096,7 +5100,7 @@
             right: -2%;
             bottom: -8px;
             height: 12px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14'%3E%3Cpath d='M4 10 Q 60 2 110 7 T 196 6' fill='none' stroke='%232AA8E0' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14'%3E%3Cpath d='M4 10 Q 60 2 110 7 T 196 6' fill='none' stroke='%234B9B6E' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%;
         }
 
         .cta-center {
@@ -5855,8 +5859,8 @@
                     </select>
                 </div>
 
-                <p class="results-count"
-                    x-text="visibleCount + ' clinic' + (visibleCount===1?'':'s') + ' & doctor' + (visibleCount===1?'':'s') + ' found'"></p>
+                {{-- <p class="results-count"
+                    x-text="visibleCount + ' clinic' + (visibleCount===1?'':'s') + ' & doctor' + (visibleCount===1?'':'s') + ' found'"></p> --}}
 
                 <div class="dr-cards-row">
                     @forelse($landingPages ?? [] as $landingPage)
@@ -6201,13 +6205,13 @@
     <section class="section" id="doctors" x-data="{
         active: 'All',
         doctors: [
-            { name: 'Dr. Rajesh Sharma', spec: 'Orthopedic', city: 'Jaipur', color: '#2447B2', init: 'RS', exp: '12 yrs', rating: '4.9' },
-            { name: 'Dr. Anita Patel', spec: 'Dentist', city: 'Ahmedabad', color: '#0F8A73', init: 'AP', exp: '8 yrs', rating: '4.8' },
+            { name: 'Dr. Rajesh Sharma', spec: 'Orthopedic', city: 'Jaipur', color: '#2E7D5C', init: 'RS', exp: '12 yrs', rating: '4.9' },
+            { name: 'Dr. Anita Patel', spec: 'Dentist', city: 'Ahmedabad', color: '#4B9B6E', init: 'AP', exp: '8 yrs', rating: '4.8' },
             { name: 'Dr. Neha Kulkarni', spec: 'Physiotherapist', city: 'Pune', color: '#D93B4A', init: 'NK', exp: '6 yrs', rating: '5.0' },
             { name: 'Dr. Sanjay Mehta', spec: 'Orthopedic', city: 'Indore', color: '#7A5AF8', init: 'SM', exp: '15 yrs', rating: '4.7' },
             { name: 'Dr. Priya Verma', spec: 'Dentist', city: 'Lucknow', color: '#E07B2A', init: 'PV', exp: '9 yrs', rating: '4.9' },
-            { name: 'Dr. Amit Singh', spec: 'Physiotherapist', city: 'Delhi', color: '#0F8A73', init: 'AS', exp: '7 yrs', rating: '4.8' },
-            { name: 'Dr. Kavita Rao', spec: 'Gynecologist', city: 'Hyderabad', color: '#2447B2', init: 'KR', exp: '14 yrs', rating: '5.0' },
+            { name: 'Dr. Amit Singh', spec: 'Physiotherapist', city: 'Delhi', color: '#4B9B6E', init: 'AS', exp: '7 yrs', rating: '4.8' },
+            { name: 'Dr. Kavita Rao', spec: 'Gynecologist', city: 'Hyderabad', color: '#2E7D5C', init: 'KR', exp: '14 yrs', rating: '5.0' },
             { name: 'Dr. Rohit Bansal', spec: 'Dermatologist', city: 'Chandigarh', color: '#D93B4A', init: 'RB', exp: '10 yrs', rating: '4.9' }
         ],
         cats: ['All', 'Orthopedic', 'Dentist', 'Physiotherapist', 'Gynecologist', 'Dermatologist'],
@@ -6265,7 +6269,7 @@
                     <p>My new patient calls almost doubled in four months. The WhatsApp reminders alone cut my no-shows
                         dramatically.</p>
                     <div class="who">
-                        <div class="av" style="background:#2447B2">RS</div>
+                        <div class="av" style="background:#2E7D5C">RS</div>
                         <div>
                             <div class="nm">Dr. Rajesh Sharma</div>
                             <div class="cl">Orthopedic · Jaipur</div>
@@ -6278,7 +6282,7 @@
                     <p>Finally an agency that gets healthcare. They knew exactly what a dental patient looks for before
                         I explained anything.</p>
                     <div class="who">
-                        <div class="av" style="background:#0F8A73">AP</div>
+                        <div class="av" style="background:#4B9B6E">AP</div>
                         <div>
                             <div class="nm">Dr. Anita Patel</div>
                             <div class="cl">Dentist · Ahmedabad</div>
@@ -6307,7 +6311,7 @@
         <div class="wrap">
             <div class="mosaic reveal" aria-hidden="true">
                 <div class="mtile" style="background:rgba(255,255,255,.14)"></div>
-                <div class="mtile ph" style="background:#0F8A73">AP</div>
+                <div class="mtile ph" style="background:#4B9B6E">AP</div>
                 <div class="mtile" style="background:rgba(255,255,255,.1)"></div>
                 <div class="mtile ph" style="background:#D93B4A">NK</div>
                 <div class="mtile" style="background:var(--marker)"></div>
@@ -6317,12 +6321,12 @@
                 <div class="mtile" style="background:rgba(255,255,255,.1)"></div>
                 <div class="mtile ph" style="background:#0EA5A5">AS</div>
                 <div class="mtile" style="background:var(--rx)"></div>
-                <div class="mtile ph" style="background:#2447B2">KR</div>
+                <div class="mtile ph" style="background:#2E7D5C">KR</div>
                 <div class="mtile ph" style="background:#D93B4A">RB</div>
                 <div class="mtile" style="background:rgba(255,255,255,.12)"></div>
-                <div class="mtile ph" style="background:#2447B2">RS</div>
+                <div class="mtile ph" style="background:#2E7D5C">RS</div>
                 <div class="mtile" style="background:var(--marker)"></div>
-                <div class="mtile ph" style="background:#0F8A73">MD</div>
+                <div class="mtile ph" style="background:#4B9B6E">MD</div>
                 <div class="mtile" style="background:rgba(255,255,255,.1)"></div>
                 <div class="mtile ph" style="background:#7A5AF8">JT</div>
                 <div class="mtile" style="background:rgba(255,255,255,.14)"></div>
@@ -6417,7 +6421,7 @@
     <footer class="footer">
         <div class="wrap">
             <a href="{{ route('public.home') }}" class="logo"><img src="{{ Vite::asset(config('constants.company_logo')) }}"
-                    alt="PMS" class="logo-img" style="height:32px"></a>
+                    alt="PMS" class="logo-img" style="height:60px"></a>
             <div class="links">
                 <a href="#services">Services</a>
                 <a href="#online">Practice Online</a>

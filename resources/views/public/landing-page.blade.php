@@ -16,12 +16,12 @@
     <style>
         :root {
             /* ── Core palette — deep clinical teal + warm gold, not the default SaaS blue ── */
-            --sp-ink:          #172723;
-            --sp-teal-900:     #0b332c;
-            --sp-teal-800:     #0f4a40;
-            --sp-teal-700:     #14604f;
-            --sp-teal-500:     #1f8a72;
-            --sp-teal-100:     #e6f2ee;
+            --sp-ink:          #1B5E3A;
+            --sp-teal-900:     #1B5E3A;
+            --sp-teal-800:     #2E7D5C;
+            --sp-teal-700:     #4B9B6E;
+            --sp-teal-500:     #6BBF8A;
+            --sp-teal-100:     #A8D5BA;
             --sp-gold-600:     #b3873f;
             --sp-gold-500:     #c79a52;
             --sp-gold-100:     #f6ecd8;

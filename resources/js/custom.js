@@ -1,7 +1,7 @@
 import './bootstrap';
-import '../images/skoracare-logo.png';
-import '../images/skoracare-login.png';
-import '../images/logo.jpg';
+import.meta.glob([
+    '../images/**',
+], { eager: true });
 import 'laravel-datatables-vite';
 import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
 import './modules/dashboard';
