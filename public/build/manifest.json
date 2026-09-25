@@ -67,6 +67,10 @@
     "file": "assets/logo-BF9H76Az.jpg",
     "src": "resources/images/logo.jpg"
   },
+  "resources/images/logo.png": {
+    "file": "assets/logo-DYqmzfHj.png",
+    "src": "resources/images/logo.png"
+  },
   "resources/images/search.svg": {
     "file": "assets/search-mjaZLkQX.svg",
     "src": "resources/images/search.svg"
@@ -78,6 +82,10 @@
   "resources/images/skoracare-logo.png": {
     "file": "assets/skoracare-logo-Czzmh1rM.png",
     "src": "resources/images/skoracare-logo.png"
+  },
+  "resources/images/skoracare-logo22.png": {
+    "file": "assets/skoracare-logo22-Ceef1cQB.png",
+    "src": "resources/images/skoracare-logo22.png"
   },
   "resources/js/custom.js": {
     "file": "assets/custom-DySsWUhP.js",
@@ -92,7 +100,7 @@
     ]
   },
   "resources/scss/custom.scss": {
-    "file": "assets/custom-D9y04Fhk.css",
+    "file": "assets/custom-23p1Blpi.css",
     "name": "custom",
     "names": [
       "custom.css"
@@ -110,12 +118,12 @@
       "assets/Laila-Regular-Cszffzo3.ttf",
       "assets/Laila-Medium-BjqlY9ET.ttf",
       "assets/Laila-SemiBold-CZAjUkjC2.ttf",
-      "assets/Laila-Bold-g72P2L-l2.ttf",
+      "assets/Laila-Bold-g72P2L-l.ttf",
       "assets/search-mjaZLkQX.svg"
     ]
   },
   "resources/scss/fonts/Laila-Bold.ttf": {
-    "file": "assets/Laila-Bold-g72P2L-l2.ttf",
+    "file": "assets/Laila-Bold-g72P2L-l.ttf",
     "src": "resources/scss/fonts/Laila-Bold.ttf"
   },
   "resources/scss/fonts/Laila-Light.ttf": {
@@ -135,7 +143,7 @@
     "src": "resources/scss/fonts/Laila-SemiBold.ttf"
   },
   "resources/scss/fonts/laila-Bold.ttf": {
-    "file": "assets/Laila-Bold-g72P2L-l2.ttf",
+    "file": "assets/Laila-Bold-g72P2L-l.ttf",
     "src": "resources/scss/fonts/Laila-Bold.ttf"
   },
   "resources/scss/fonts/laila-SemiBold.ttf": {
