@@ -73,34 +73,43 @@
                                 <strong class="text-dark me-1">{{ $package->clinic_limit == -1 ? 'Unlimited' : $package->clinic_limit }}</strong> Clinic Management
                             </li>
                             
-                            @php
-                                $allFeatureLabels = [
-                                    'appointment-list' => 'Appointment Management',
-                                    'clinic-list' => 'Billing System Integrated',
-                                    'patients-list' => 'Comprehensive Patient Record',
-                                    'follow-up-list' => 'Digital Prescription & Follow-up',
-                                    'pharmacy-list' => 'Pharmacy & Ledger Management',
-                                    'analytics-list' => 'Data Analytics & Reports',
-                                    'ask-skoracare-list' => 'Ask Skoracare AI Assistant',
-                                    'messages-list' => 'Multi-channel Communication',
-                                ];
-                                $packagePermNames = $package->permissions->pluck('name')->toArray();
-                            @endphp
-
-                            @foreach($allFeatureLabels as $permCode => $featureTitle)
+                            @if($package->features && $package->features->count() > 0)
+                                @foreach($package->features as $feature)
+                                    <li class="d-flex align-items-center py-2 border-bottom border-light text-secondary">
+                                        <i class="fa-solid fa-circle-check text-teal me-2" style="color: #0d9488;"></i>
+                                        <span>{{ $feature->name }}</span>
+                                    </li>
+                                @endforeach
+                            @else
                                 @php
-                                    $hasFeature = in_array($permCode, $packagePermNames) || $package->clinic_limit == -1;
+                                    $allFeatureLabels = [
+                                        'appointment-list' => 'Appointment Management',
+                                        'clinic-list' => 'Billing System Integrated',
+                                        'patients-list' => 'Comprehensive Patient Record',
+                                        'follow-up-list' => 'Digital Prescription & Follow-up',
+                                        'pharmacy-list' => 'Pharmacy & Ledger Management',
+                                        'analytics-list' => 'Data Analytics & Reports',
+                                        'ask-skoracare-list' => 'Ask Skoracare AI Assistant',
+                                        'messages-list' => 'Multi-channel Communication',
+                                    ];
+                                    $packagePermNames = $package->permissions->pluck('name')->toArray();
                                 @endphp
-                                <li class="d-flex align-items-center py-2 border-bottom border-light {{ $hasFeature ? 'text-secondary' : 'text-muted opacity-50' }}">
-                                    @if($hasFeature)
-                                        <i class="fa-solid fa-circle-check me-2" style="color: #0d9488;"></i>
-                                        <span>{{ $featureTitle }}</span>
-                                    @else
-                                        <i class="fa-solid fa-circle-xmark me-2 text-muted"></i>
-                                        <span class="text-decoration-line-through">{{ $featureTitle }}</span>
-                                    @endif
-                                </li>
-                            @endforeach
+
+                                @foreach($allFeatureLabels as $permCode => $featureTitle)
+                                    @php
+                                        $hasFeature = in_array($permCode, $packagePermNames) || $package->clinic_limit == -1;
+                                    @endphp
+                                    <li class="d-flex align-items-center py-2 border-bottom border-light {{ $hasFeature ? 'text-secondary' : 'text-muted opacity-50' }}">
+                                        @if($hasFeature)
+                                            <i class="fa-solid fa-circle-check me-2" style="color: #0d9488;"></i>
+                                            <span>{{ $featureTitle }}</span>
+                                        @else
+                                            <i class="fa-solid fa-circle-xmark me-2 text-muted"></i>
+                                            <span class="text-decoration-line-through">{{ $featureTitle }}</span>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            @endif
                         </ul>
 
                         {{-- Action Button --}}

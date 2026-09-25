@@ -45,6 +45,19 @@ class Package extends Model
     }
 
     /**
+     * The marketing/display features associated with this package.
+     */
+    public function features(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Feature::class,
+            'package_features',
+            'package_id',
+            'feature_id'
+        )->withPivot('sort_order')->withTimestamps()->orderByPivot('sort_order');
+    }
+
+    /**
      * The users assigned to this package.
      */
     public function users(): HasMany

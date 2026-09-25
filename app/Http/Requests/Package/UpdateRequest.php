@@ -26,6 +26,8 @@ class UpdateRequest extends FormRequest
             'status' => 'required|string|in:active,inactive',
             'is_popular' => 'nullable|boolean',
             'permissions' => 'nullable|array',
+            'features' => 'nullable|array',
+            'features.*' => 'nullable|string|max:255',
         ];
     }
 }

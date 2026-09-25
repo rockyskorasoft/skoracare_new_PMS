@@ -154,15 +154,20 @@ class AppointmentController extends Controller
 
     /**
      * AJAX Search Patients by name, phone or ID (Screenshot 2 & Screenshot 5).
+     * Returns up to 5 patients as requested.
      */
     public function searchPatients(Request $request): JsonResponse
     {
         $q = trim($request->get('q', ''));
+        $patientRole = config('constants.patient_role_name', 'Patient');
 
         if (empty($q)) {
-            $patients = User::role(config('constants.patient_role_name'))->limit(10)->get();
+            $patients = User::role($patientRole)
+                ->orderBy('id', 'desc')
+                ->limit(5)
+                ->get();
         } else {
-            $patients = User::role(config('constants.patient_role_name'))
+            $patients = User::role($patientRole)
                 ->where(function ($query) use ($q) {
                     $query->where('first_name', 'like', "%{$q}%")
                         ->orWhere('last_name', 'like', "%{$q}%")
@@ -170,7 +175,8 @@ class AppointmentController extends Controller
                         ->orWhere('phone_no', 'like', "%{$q}%")
                         ->orWhere('id', 'like', "%{$q}%");
                 })
-                ->limit(10)
+                ->orderBy('id', 'desc')
+                ->limit(5)
                 ->get();
         }
 
@@ -182,17 +188,106 @@ class AppointmentController extends Controller
 
             return [
                 'id' => $p->id,
-                'name' => $fullName ?: $p->email,
-                'phone' => $p->phone_no ?? '7766886760',
+                'name' => $fullName ?: ($p->email ?? 'Patient #' . $p->id),
+                'first_name' => $p->first_name,
+                'last_name' => $p->last_name,
+                'phone' => $p->phone_no ?? '',
                 'email' => $p->email,
                 'gender' => $gender,
                 'age' => $age,
                 'patient_id_formatted' => $patId,
-                'label' => "Mr {$fullName} ({$gender}, {$age}) - " . ($p->phone_no ?? '') . " - {$patId}",
+                'label' => "{$fullName} ({$gender}, {$age}) - " . ($p->phone_no ?? '') . " - {$patId}",
             ];
         });
 
         return response()->json($results);
+    }
+
+    /**
+     * AJAX Quick store new Patient directly from confirm drawer.
+     */
+    public function quickStorePatient(Request $request): JsonResponse
+    {
+        $request->validate([
+            'patient_name' => 'required|string|max:150',
+            'patient_phone' => 'required|string|max:20',
+            'gender' => 'nullable|string|in:Male,Female,Other',
+            'age' => 'nullable|string|max:10',
+        ]);
+
+        $cleanPhone = preg_replace('/[^0-9]/', '', $request->patient_phone);
+        if (strlen($cleanPhone) < 7) {
+            $cleanPhone = $request->patient_phone;
+        }
+
+        $patientRole = config('constants.patient_role_name', 'Patient');
+
+        // Check if patient already exists by phone
+        $existing = User::role($patientRole)
+            ->where(function ($q) use ($cleanPhone, $request) {
+                $q->where('phone_no', $request->patient_phone)
+                  ->orWhere('phone_no', $cleanPhone);
+            })
+            ->first();
+
+        if ($existing) {
+            $fullName = trim("{$existing->first_name} {$existing->last_name}");
+            $patId = 'PAT' . str_pad($existing->id, 4, '0', STR_PAD_LEFT);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Existing patient found and selected.',
+                'patient' => [
+                    'id' => $existing->id,
+                    'name' => $fullName ?: ($existing->email ?? 'Patient #' . $existing->id),
+                    'phone' => $existing->phone_no,
+                    'email' => $existing->email,
+                    'gender' => $existing->gender ?? 'Male',
+                    'age' => $existing->age ? "{$existing->age}y" : '30y',
+                    'patient_id_formatted' => $patId,
+                ],
+            ]);
+        }
+
+        $parts = explode(' ', trim($request->patient_name), 2);
+        $firstName = $parts[0] ?? 'Patient';
+        $lastName = $parts[1] ?? '';
+
+        $email = 'patient_' . ($cleanPhone ?: time()) . '@skoracare.com';
+        while (User::where('email', $email)->exists()) {
+            $email = 'patient_' . rand(10000, 99999) . '_' . time() . '@skoracare.com';
+        }
+
+        $user = User::create([
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'phone_no' => $request->patient_phone,
+            'email' => $email,
+            'status' => \App\Enums\CommonStatus::ACTIVE->value ?? 'active',
+            'password' => bcrypt(str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT)),
+            'created_by' => auth()->id(),
+        ]);
+
+        if (\Spatie\Permission\Models\Role::where('name', $patientRole)->exists()) {
+            $user->assignRole($patientRole);
+        }
+
+        $fullName = trim("{$user->first_name} {$user->last_name}");
+        $patId = 'PAT' . str_pad($user->id, 4, '0', STR_PAD_LEFT);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'New patient added successfully!',
+            'patient' => [
+                'id' => $user->id,
+                'name' => $fullName,
+                'phone' => $user->phone_no,
+                'email' => $user->email,
+                'gender' => $request->gender ?? 'Male',
+                'age' => $request->age ? "{$request->age}y" : '30y',
+                'patient_id_formatted' => $patId,
+            ],
+        ]);
     }
 
     /**
@@ -209,6 +304,48 @@ class AppointmentController extends Controller
         ]);
 
         $activeClinicId = session('active_clinic_id');
+        $patientId = $request->patient_id ?: null;
+
+        // Auto-link or auto-register patient user if not selected
+        if (!$patientId && !empty($request->patient_phone)) {
+            $cleanPhone = preg_replace('/[^0-9]/', '', $request->patient_phone);
+            $patientRole = config('constants.patient_role_name', 'Patient');
+
+            $existingPatient = User::role($patientRole)
+                ->where(function ($q) use ($cleanPhone, $request) {
+                    $q->where('phone_no', $request->patient_phone)
+                      ->orWhere('phone_no', $cleanPhone);
+                })
+                ->first();
+
+            if ($existingPatient) {
+                $patientId = $existingPatient->id;
+            } else {
+                $parts = explode(' ', trim($request->patient_name), 2);
+                $firstName = $parts[0] ?? 'Patient';
+                $lastName = $parts[1] ?? '';
+
+                $email = 'patient_' . ($cleanPhone ?: time()) . '@skoracare.com';
+                while (User::where('email', $email)->exists()) {
+                    $email = 'patient_' . rand(10000, 99999) . '_' . time() . '@skoracare.com';
+                }
+
+                $newUser = User::create([
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'phone_no' => $request->patient_phone,
+                    'email' => $email,
+                    'status' => \App\Enums\CommonStatus::ACTIVE->value ?? 'active',
+                    'password' => bcrypt(str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT)),
+                    'created_by' => auth()->id(),
+                ]);
+
+                if (\Spatie\Permission\Models\Role::where('name', $patientRole)->exists()) {
+                    $newUser->assignRole($patientRole);
+                }
+                $patientId = $newUser->id;
+            }
+        }
 
         // Generate unique appointment number
         $lastId = Appointment::max('id') ?? 0;
@@ -218,7 +355,7 @@ class AppointmentController extends Controller
             'appointment_number' => $appointmentNumber,
             'clinic_id' => $activeClinicId,
             'doctor_id' => $request->doctor_id,
-            'patient_id' => $request->patient_id ?: null,
+            'patient_id' => $patientId,
             'patient_name' => $request->patient_name,
             'patient_phone' => $request->patient_phone,
             'patient_email' => $request->patient_email,

@@ -71,10 +71,70 @@
                         :value="old('description', $package->description)"
                     />
 
+                    {{-- Package Marketing Features Repeater --}}
+                    <div class="role-section-header my-3">
+                        <span class="role-section-icon"><i class="fa-solid fa-list-check"></i></span>
+                        <span>Package Features</span>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="card border shadow-none" style="background-color: #f8fafc;">
+                            <div class="card-body p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0 fw-semibold text-dark">
+                                            <i class="fa-solid fa-circle-check text-success me-1"></i>Package Feature Offerings
+                                        </h6>
+                                        <small class="text-muted">Features shown on pricing card (e.g. Doctor website + WhatsApp booking, Google Business & local SEO, 3 social posts / week).</small>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" id="addFeatureBtn">
+                                        <i class="fa-solid fa-plus me-1"></i> Add Feature
+                                    </button>
+                                </div>
+
+                                @php
+                                    $oldFeatures = old('features');
+                                    if ($oldFeatures !== null) {
+                                        $featureList = is_array($oldFeatures) ? $oldFeatures : [];
+                                    } else {
+                                        $featureList = $package->features->pluck('name')->toArray();
+                                    }
+                                    $validFeatures = array_filter($featureList, fn($f) => trim((string)$f) !== '');
+                                @endphp
+
+                                <div id="featuresContainer" class="d-flex flex-column gap-2">
+                                    @forelse ($validFeatures as $featureVal)
+                                        <div class="feature-item d-flex align-items-center gap-2 bg-white p-2 border rounded shadow-sm">
+                                            <span class="text-success fs-5 px-1"><i class="fa-solid fa-circle-check"></i></span>
+                                            <input type="text" name="features[]" class="form-control" list="featuresList" placeholder="e.g. Doctor website + WhatsApp booking" value="{{ $featureVal }}">
+                                            <button type="button" class="btn btn-outline-danger btn-sm remove-feature-btn" title="Remove Feature">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    @empty
+                                    @endforelse
+                                </div>
+
+                                <div id="noFeaturesMsg" class="text-center py-3 text-muted border border-dashed rounded bg-white mt-2" style="{{ count($validFeatures) > 0 ? 'display: none;' : '' }}">
+                                    <i class="fa-solid fa-list-check mb-1 d-block fs-4 text-secondary"></i>
+                                    <span>No features added yet. Click <strong>"Add Feature"</strong> to add bullet points for this package.</span>
+                                </div>
+
+                                @if(isset($allFeatures) && $allFeatures->count() > 0)
+                                    <datalist id="featuresList">
+                                        @foreach($allFeatures as $featName)
+                                            <option value="{{ $featName }}"></option>
+                                        @endforeach
+                                    </datalist>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- Package Permissions (Same exact tree layout as Roles) --}}
                     <div class="role-section-header my-3">
                         <span class="role-section-icon"><i class="fa-solid fa-lock"></i></span>
-                        <span>Package Permissions & Included Features</span>
+                        <span>Package Permissions & System Access</span>
                     </div>
 
                     <div class="col-md-12 mb-3">
@@ -142,3 +202,62 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const featuresContainer = document.getElementById('featuresContainer');
+        const addFeatureBtn = document.getElementById('addFeatureBtn');
+        const noFeaturesMsg = document.getElementById('noFeaturesMsg');
+
+        function updateNoFeaturesMsg() {
+            if (!featuresContainer || !noFeaturesMsg) return;
+            const count = featuresContainer.querySelectorAll('.feature-item').length;
+            noFeaturesMsg.style.display = count === 0 ? '' : 'none';
+        }
+
+        function createFeatureRow(val = '') {
+            const row = document.createElement('div');
+            row.className = 'feature-item d-flex align-items-center gap-2 bg-white p-2 border rounded shadow-sm';
+            
+            const safeVal = val.replace(/"/g, '&quot;');
+            row.innerHTML = `
+                <span class="text-success fs-5 px-1"><i class="fa-solid fa-circle-check"></i></span>
+                <input type="text" name="features[]" class="form-control" list="featuresList" placeholder="e.g. Doctor website + WhatsApp booking" value="${safeVal}">
+                <button type="button" class="btn btn-outline-danger btn-sm remove-feature-btn" title="Remove Feature">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            `;
+
+            row.querySelector('.remove-feature-btn').addEventListener('click', function () {
+                row.remove();
+                updateNoFeaturesMsg();
+            });
+
+            return row;
+        }
+
+        if (addFeatureBtn) {
+            addFeatureBtn.addEventListener('click', function () {
+                const newRow = createFeatureRow();
+                featuresContainer.appendChild(newRow);
+                updateNoFeaturesMsg();
+                const input = newRow.querySelector('input');
+                if (input) input.focus();
+            });
+        }
+
+        if (featuresContainer) {
+            featuresContainer.querySelectorAll('.remove-feature-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const row = btn.closest('.feature-item');
+                    if (row) row.remove();
+                    updateNoFeaturesMsg();
+                });
+            });
+        }
+
+        updateNoFeaturesMsg();
+    });
+</script>
+@endpush

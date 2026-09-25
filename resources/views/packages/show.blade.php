@@ -56,9 +56,32 @@
         </div>
 
         <div class="col-md-7">
-            <div class="card no-scale h-100">
+            {{-- Package Features --}}
+            <div class="card no-scale mb-4">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-primary"><i class="fa-solid fa-list-check me-2"></i>Package Features</h5>
+                    <span class="badge bg-primary rounded-pill">{{ $package->features->count() }} Features</span>
+                </div>
+                <div class="card-body">
+                    @if($package->features->count() > 0)
+                        <ul class="list-group list-group-flush">
+                            @foreach($package->features as $feature)
+                                <li class="list-group-item d-flex align-items-center px-0 py-2 border-bottom">
+                                    <i class="fa-solid fa-circle-check text-success me-2 fs-6"></i>
+                                    <span class="text-dark fw-medium">{{ $feature->name }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-muted mb-0">No specific features attached to this package.</p>
+                    @endif
+                </div>
+            </div>
+
+            {{-- System Permissions --}}
+            <div class="card no-scale">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0 text-primary"><i class="fa-solid fa-lock me-2"></i>Included Features & Permissions</h5>
+                    <h5 class="mb-0 text-secondary"><i class="fa-solid fa-lock me-2"></i>System Permissions</h5>
                 </div>
                 <div class="card-body">
                     @if($package->permissions->count() > 0)
@@ -70,7 +93,7 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-muted mb-0">No specific features attached to this package.</p>
+                        <p class="text-muted mb-0">No system permissions attached to this package.</p>
                     @endif
                 </div>
             </div>

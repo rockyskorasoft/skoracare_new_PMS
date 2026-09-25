@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Feature;
 use App\Models\Package;
 use Illuminate\Http\Request;
 
@@ -57,5 +58,25 @@ class PackageService
     {
         $package = $this->getDataById($id);
         return $package->delete();
+    }
+
+    /**
+     * Synchronize package marketing features using the pivot table.
+     */
+    public function syncFeatures(Package $package, array $features): void
+    {
+        $syncData = [];
+        $order = 0;
+        foreach ($features as $featureItem) {
+            $name = is_array($featureItem) ? ($featureItem['name'] ?? '') : (string)$featureItem;
+            $name = trim($name);
+            if ($name === '') {
+                continue;
+            }
+            $feature = Feature::firstOrCreate(['name' => $name]);
+            $syncData[$feature->id] = ['sort_order' => $order++];
+        }
+
+        $package->features()->sync($syncData);
     }
 }

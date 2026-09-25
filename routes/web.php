@@ -53,6 +53,7 @@ Route::middleware(['auth'])->as('admin.')->group(function () {
     Route::get('/appointments/slot-booking', [\App\Http\Controllers\Web\AppointmentController::class, 'slotBooking'])->name('appointments.slot-booking');
     Route::get('/appointments/ajax-slots', [\App\Http\Controllers\Web\AppointmentController::class, 'getSlots'])->name('appointments.ajax-slots');
     Route::get('/appointments/search-patients', [\App\Http\Controllers\Web\AppointmentController::class, 'searchPatients'])->name('appointments.search-patients');
+    Route::post('/appointments/quick-create-patient', [\App\Http\Controllers\Web\AppointmentController::class, 'quickStorePatient'])->name('appointments.quick-create-patient');
     Route::post('/appointments/{appointment}/status', [\App\Http\Controllers\Web\AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::resource('appointments', \App\Http\Controllers\Web\AppointmentController::class);
 

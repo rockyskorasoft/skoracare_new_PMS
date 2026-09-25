@@ -40,7 +40,7 @@ class PackageController extends WebController
      */
     public function pricing()
     {
-        $packages = \App\Models\Package::with('permissions')->where('status', 'active')->get();
+        $packages = \App\Models\Package::with(['permissions', 'features'])->where('status', 'active')->get();
         return view('packages.pricing', compact('packages'));
     }
 
@@ -52,7 +52,8 @@ class PackageController extends WebController
         $permissions = [
             'children' => $this->permissionRepository->getAllData(),
         ];
-        return view('packages.create', compact('permissions'));
+        $allFeatures = \App\Models\Feature::orderBy('name')->pluck('name');
+        return view('packages.create', compact('permissions', 'allFeatures'));
     }
 
     /**
@@ -74,6 +75,9 @@ class PackageController extends WebController
                 $package->permissions()->sync($permissionIds);
             }
 
+            // Sync package marketing features via pivot table
+            $this->packageService->syncFeatures($package, $request->input('features', []));
+
             $this->dbObject::commit();
 
             return $this->successResponse('admin.packages.index', trans('app.data_created', ['action' => 'Package']));
@@ -91,7 +95,7 @@ class PackageController extends WebController
     {
         $packageId = SecureRouteParameter::decodeOrFail($id);
         $package = $this->packageService->getDataById($packageId);
-        $package->load('permissions');
+        $package->load(['permissions', 'features']);
 
         return view('packages.show', compact('package'));
     }
@@ -103,14 +107,15 @@ class PackageController extends WebController
     {
         $packageId = SecureRouteParameter::decodeOrFail($id);
         $package = $this->packageService->getDataById($packageId);
-        $package->load('permissions');
+        $package->load(['permissions', 'features']);
 
         $permissions = [
             'children' => $this->permissionRepository->getAllData(),
         ];
         $packagePermissionIds = $package->permissions->pluck('id')->toArray();
+        $allFeatures = \App\Models\Feature::orderBy('name')->pluck('name');
 
-        return view('packages.edit', compact('package', 'permissions', 'packagePermissionIds'));
+        return view('packages.edit', compact('package', 'permissions', 'packagePermissionIds', 'allFeatures'));
     }
 
     /**
@@ -130,6 +135,9 @@ class PackageController extends WebController
             $permissionIds = array_filter(array_merge($parents, $children));
 
             $package->permissions()->sync($permissionIds);
+
+            // Sync package marketing features via pivot table
+            $this->packageService->syncFeatures($package, $request->input('features', []));
 
             $this->dbObject::commit();
 
